@@ -32,7 +32,16 @@ export class CatalogueService {
 
   deleteProduct(url: string) {
     console.log('Appel du service deleteProduct()');
-    return this.httpClient.delete(url).pipe(
+    return this.httpClient.delete<any>(url).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  createProduct(data: any) {
+    console.log('Appel du service createproduct()');
+    const url = this.host + 'produits';
+    console.log('données à ajouter : ' + data);
+    return this.httpClient.post<any>(url, data).pipe(
       catchError(this.handleError)
     );
   }

@@ -20,7 +20,7 @@ export class ProduitsComponent implements OnInit {
   constructor(private catalogueService: CatalogueService) { }
 
   ngOnInit() {
-
+    this.onGetProducts();
   }
 
   onGetProducts() {
@@ -64,7 +64,15 @@ export class ProduitsComponent implements OnInit {
     const confirm = window.confirm('Etes-vous sûr ? ');
     if (confirm) {
       this.catalogueService.deleteProduct(produit._links.self.href).subscribe(data => {
+        // on check si le produit etait le seul sur sa page
+        // si c le cas la page actuelle sera la page précédente
+        const nbrProduitsPageEnCours = this.products._embedded.produits.length;
+        if (nbrProduitsPageEnCours === 1 && this.currentPage > 0) {
+          this.currentPage--;
+        }
         this.onFindProduct();
+
+
       }, err => {
         console.log('Problème lors de la suppression');
       });

@@ -1,3 +1,39 @@
-<p>
-  new-product works!
-</p>
+<div class="container">
+  <div class="col-md-6 col-sm-6 col-xs-12">
+    <div class="panel panel-primary">
+      <div class="panel-heading">Nouveau Produit</div>
+      <div class="panel-body">
+        <form (ngSubmit)="onSubmit()" [formGroup]="this.productForm">
+          <div class="form-group">
+            <label for="designation">Désignation</label>
+            <input [(ngModel)]="this.product.designation" class="form-control" formControlName="designation"
+              type="text">
+            <div
+              *ngIf="this.productForm.controls['designation'].errors && this.productForm.controls['designation'].value">
+              <p class="alert alert-info">Erreur sur le nom du produit</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="price">Prix</label>
+            <input [(ngModel)]="this.product.price" class="form-control" formControlName="price" id="price" type="text">
+            <p *ngIf="this.productForm.controls['price'].value != '' && this.productForm.controls['price'].errors"
+              class="alert alert-info">Erreur sur le prix</p>
+          </div>
+
+          <div class="form-group">
+            <label for="quantite">Quantité</label>
+            <input [(ngModel)]="this.product.quantite" class="form-control" formControlName="quantite" id="quantite"
+              type="text">
+            <p *ngIf="this.productForm.controls['quantite'].value != '' && this.productForm.controls['quantite'].errors"
+              class="alert alert-info">Erreur sur la quantité</p>
+          </div>
+
+          <div>
+            <button [disabled]="this.productForm.invalid" class="btn btn-success" type="submit">Créer</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
