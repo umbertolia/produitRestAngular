@@ -2,9 +2,6 @@
   <div class="panel panel-primary">
     <div class="panel-heading">Liste des produits</div>
     <div class="panel-body">
-      <button class="btn btn-primary" (click)="onGetProducts()">Produits</button>
-    </div>
-    <div class="panel-body">
       <form #f="ngForm" (ngSubmit)="onFindWithKeyWord(f.value)" >
         <div class='form-group'>
           <label>Mot Clé : </label>
@@ -27,7 +24,8 @@
           <td>{{prod.designation}}</td>
           <td>{{prod.price | number:'1.2-2'}}</td>
           <td>{{prod.quantite}}</td>
-          <td><a class="btn btn-danger" (click)="onDeleteProduct(prod)" >Delete</a></td>
+          <td><a class="btn btn-info" (click)="onUpdateProduct(prod)" >Modifier</a></td>
+          <td><a class="btn btn-danger" (click)="onDeleteProduct(prod)" >Supprimer</a></td>
         </tr>
       </table>
       <ul *ngIf="pages" class="nav nav-pills">

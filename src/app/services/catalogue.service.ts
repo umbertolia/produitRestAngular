@@ -1,3 +1,4 @@
+import { environment } from '@environment';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
@@ -10,38 +11,53 @@ import { catchError, tap, map } from 'rxjs/operators';
 })
 export class CatalogueService {
 
-  host = 'http://localhost:8080/catalogue/';
 
   constructor(private httpClient: HttpClient) { }
 
-  getProducts(page: number, size: number) {
+  getProducts(page: number, size: number): Observable<any> {
     console.log('Appel du service getProducts()');
-    return this.httpClient.get<any>(this.host + 'produits?page=' + page + '&size=' + size).pipe(
+    return this.httpClient.get<any>(environment.serverUrl + 'produits?page=' + page + '&size=' + size).pipe(
       catchError(this.handleError)
     );
   }
 
-  getProductsByKeyWord(key: string, page: number, size: number) {
+  getProductsByKeyWord(key: string, page: number, size: number): Observable<any> {
     console.log('Appel du service getProductsByKeyWord()');
-    const url = this.host + 'produits/search/byDesignationPage?des=' + key + '&page=' + page + '&size=' + size;
+    const url = environment.serverUrl + 'produits/search/byDesignationPage?des=' + key + '&page=' + page + '&size=' + size;
     console.log('url : ' + url);
     return this.httpClient.get<any>(url).pipe(
       catchError(this.handleError)
     );
   }
 
-  deleteProduct(url: string) {
+  getProductByUrl(url: string): Observable<any> {
+    console.log('Appel du service getProductByUrl()');
+    console.log('url : ' + url);
+    return this.httpClient.get<any>(url).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  deleteProduct(url: string): Observable<any> {
     console.log('Appel du service deleteProduct()');
     return this.httpClient.delete<any>(url).pipe(
       catchError(this.handleError)
     );
   }
 
-  createProduct(data: any) {
+  createProduct(data: any): Observable<any> {
     console.log('Appel du service createproduct()');
-    const url = this.host + 'produits';
+    const url = environment.serverUrl + 'produits';
     console.log('données à ajouter : ' + data);
     return this.httpClient.post<any>(url, data).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  updateProduct(url: string, data: any): Observable<any> {
+    console.log('Appel du service upadateProduct()');
+    console.log('url : ' + url);
+    return this.httpClient.put<any>(url, data).pipe(
       catchError(this.handleError)
     );
   }

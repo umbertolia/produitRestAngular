@@ -1,14 +1,19 @@
+import { Router } from '@angular/router';
 import { Produit } from './../models/produit.model';
 import { CatalogueService } from './../services/catalogue.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs/internal/Observable';
+import { Subscriber } from 'rxjs';
+import { environment } from '@environment';
+
 
 @Component({
   selector: 'app-produits',
   templateUrl: './produits.component.html',
   styleUrls: ['./produits.component.css']
 })
-export class ProduitsComponent implements OnInit {
+export class ProduitsComponent implements OnInit, OnDestroy {
 
   products: any;
   size = 5;
@@ -16,8 +21,11 @@ export class ProduitsComponent implements OnInit {
   totalPages: number;
   pages: number[];
   currentKeyWord = '';
+  routeSubscriber: any;
 
-  constructor(private catalogueService: CatalogueService) { }
+  constructor(
+    private catalogueService: CatalogueService,
+    private router: Router) { }
 
   ngOnInit() {
     this.onGetProducts();
@@ -27,14 +35,13 @@ export class ProduitsComponent implements OnInit {
     if (this.currentKeyWord) {
       this.currentKeyWord = '';
     }
-    this.catalogueService.getProducts(this.currentPage, this.size)
+    this.routeSubscriber = this.catalogueService.getProducts(this.currentPage, this.size)
       .subscribe(data => {
         this.products = data;
-        this.totalPages = data['page'].totalPages;
+        this.totalPages = data[environment.stringPage].totalPages;
         this.pages = new Array(this.totalPages);
       }, err => {
         console.log('Problème lors de la récup des produits');
-
       });
   }
 
@@ -53,11 +60,24 @@ export class ProduitsComponent implements OnInit {
     this.catalogueService.getProductsByKeyWord(this.currentKeyWord, this.currentPage, this.size)
       .subscribe(data => {
         this.products = data;
-        this.totalPages = data['page'].totalPages;
+        this.totalPages = data[environment.stringPage].totalPages;
         this.pages = new Array(this.totalPages);
       }, err => {
         console.log('Problème lors de la récup des produits');
       });
+  }
+
+  onUpdateProduct(produit: any) {
+    // on se dirige vers le composant new-product en lui passant les données
+    const url = environment.path_createProduct + '/' + btoa(produit._links.self.href);
+    console.log('url update : ' + url);
+    this.router.navigateByUrl(url).then(retourOK => {
+      if (retourOK) {
+        console.log('Appel du composant NewProductComponent OK');
+      } else {
+        console.log('Appel du composant NewProductComponent KO');
+      }
+    });
   }
 
   onDeleteProduct(produit: any) {
@@ -71,13 +91,14 @@ export class ProduitsComponent implements OnInit {
           this.currentPage--;
         }
         this.onFindProduct();
-
-
       }, err => {
         console.log('Problème lors de la suppression');
       });
     }
+  }
 
+  ngOnDestroy() {
+    this.routeSubscriber.unsubscribe();
   }
 
 }

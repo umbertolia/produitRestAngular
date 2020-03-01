@@ -56,7 +56,15 @@
                   "maximumError": "5mb"
                 }
               ]
-            }
+            },
+            "dev": {
+              "fileReplacements": [
+                  {
+                      "replace": "src/environments/environment.ts",
+                      "with": "src/environments/environment.dev.ts"
+                  }
+              ]
+          }
           }
         },
         "serve": {
@@ -67,7 +75,10 @@
           "configurations": {
             "production": {
               "browserTarget": "produitAngular:build:production"
-            }
+            },
+            "dev": {
+              "browserTarget": "produitAngular:build:dev"
+          }
           }
         },
         "extract-i18n": {

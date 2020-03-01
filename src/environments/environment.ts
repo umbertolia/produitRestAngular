@@ -3,8 +3,14 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  path_getProducts: 'products',
+  path_createProduct: 'new-product',
+  path_createProductWithParam: 'new-product/:data',
+  stringParamData: 'data',
+  stringPage: 'page',
+  serverUrl: ''
 };
+
 
 /*
  * For easier debugging in development mode, you can import the following file

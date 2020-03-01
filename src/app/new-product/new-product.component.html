@@ -1,7 +1,11 @@
 <div class="container">
   <div class="col-md-6 col-sm-6 col-xs-12">
     <div class="panel panel-primary">
-      <div class="panel-heading">Nouveau Produit</div>
+
+      <div class="panel-heading">
+        <span *ngIf="modeUpdate">Modification du Produit</span>
+        <span *ngIf="!modeUpdate">Nouveau Produit</span>
+      </div>
       <div class="panel-body">
         <form (ngSubmit)="onSubmit()" [formGroup]="this.productForm">
           <div class="form-group">
@@ -30,7 +34,10 @@
           </div>
 
           <div>
-            <button [disabled]="this.productForm.invalid" class="btn btn-success" type="submit">Créer</button>
+            <button [disabled]="this.productForm.invalid" class="btn btn-success" type="submit">
+              <span *ngIf="this.modeUpdate">Modifier</span>
+              <span *ngIf="!this.modeUpdate">Créer</span>
+            </button>
           </div>
         </form>
       </div>
